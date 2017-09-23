@@ -48,11 +48,17 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode==ConstUtils.PERMISSION_SDCARD){
+            boolean grant=true;
             for(int g=0;g<grantResults.length;g++){
-                if(grantResults[g]==PackageManager.PERMISSION_GRANTED){
-                    Intent intent = new Intent(this, UpgradeService.class);
-                    bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
+                if(grantResults[g]!=PackageManager.PERMISSION_GRANTED){
+                   grant=false;
                 }
+            }
+            if(grant){
+                Intent intent = new Intent(this, UpgradeService.class);
+                bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
+            }else{
+                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},ConstUtils.PERMISSION_SDCARD);
             }
         }
     }
