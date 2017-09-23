@@ -167,6 +167,7 @@ public class UpgradeService extends Service {
             } else if (msg.what == ConstUtils.INSTALL_APK) {
                 installApk();
                 stopSelf();
+                mNotificationManger.cancel(ConstUtils.NOTITY_ID);
             }
         }
     };
